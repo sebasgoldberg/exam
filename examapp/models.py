@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import math
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -108,15 +110,17 @@ class TestModel(models.Model):
 
         total_questions = 0
         for tms, weight in tms_weights[:-1]:
-            questions = self.questions * (
-                weight / total_weight )
-            total_questions = total_questions + len(create_random_test_questions(tms, questions))
-        
+            questions = math.ceil(self.questions * (
+                weight / total_weight ))
+            total_questions = total_questions + len(t.create_random_test_questions(tms, 
+                min(questions,self.questions - total_questions)))
+
         tms, weight = tms_weights[-1]
         total_questions = total_questions + len(t.create_random_test_questions(tms, self.questions - total_questions))
 
         if total_questions <> self.questions:
-            raise QuestionsQuantityError()
+            raise QuestionsQuantityError('The expected questions %s is different than the generated questions %s.'
+                % (self.questions, total_questions))
 
         return t
 
@@ -159,8 +163,18 @@ class Test(models.Model):
         return result
 
     def get_test_note(self):
-        self.testquestions
-        for tq in self.test
+        
+        total_questions = self.testquestion_set.count()
+        correct_questions = total_questions
+
+        for tq in self.testquestion_set.all():
+            for ta in tq.testanswer_set.all():
+                if ta.is_correct <> ta.ref_answer.is_correct:
+                    correct_questions = correct_questions - 1
+                    break
+
+        return float(correct_questions)/float(total_questions)
+
 
 class TestQuestion(models.Model):
     ref_question = models.ForeignKey(Question, verbose_name=_(u'Question'))
