@@ -1,0 +1,9 @@
+<html>
+<body>
+{% for tm in test_models %}
+<ul>
+    <li><a href='/examapp/{{tm.id}}/new/'>{{tm}}</a></li>
+</ul>
+{% endfor %}
+</body>
+</html>

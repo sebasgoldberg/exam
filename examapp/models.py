@@ -175,6 +175,10 @@ class Test(models.Model):
 
         return float(correct_questions)/float(total_questions)
 
+    def iter_test_answers(self):
+        for q in self.testquestion_set.all():
+            for a in q.testanswer_set.all():
+                yield a
 
 class TestQuestion(models.Model):
     ref_question = models.ForeignKey(Question, verbose_name=_(u'Question'))

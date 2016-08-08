@@ -1,0 +1,20 @@
+<html>
+<body>
+<h2>Note: {{note|floatformat:2}} %<h2>
+
+<form action="/examapp/{{test.id}}/result/" method="post">
+    <input type="submit" value="Post and Get Test Note" />
+    <hr>
+    {% csrf_token %}
+    {% for q in test.testquestion_set.all %}
+        <strong><pre>{{q.ref_question.question}}</pre></strong>
+        {% for a in q.testanswer_set.all %}
+            <input type=checkbox name='A{{a.id}}' 
+                {% if a.is_correct %}checked=checked{% endif %} id='id_A{{a.id}}'>{{a.ref_answer.answer}}</input><br/>
+        {% endfor %}
+        <hr>
+    {% endfor %}
+    <input type="submit" value="Post and Get Test Note" />
+</form>
+</body>
+</html>

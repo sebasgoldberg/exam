@@ -1,5 +1,6 @@
 from django.test import TestCase
 from examapp.models import *
+from examapp.forms import *
 
 class TestBasicExam(TestCase):
 
@@ -29,6 +30,17 @@ class TestBasicExam(TestCase):
             subject=self.subject,
             weight_from=1,
             weight_to=1)
+
+    def test_test_form(self):
+
+        T = self.TM.create_test()
+
+        tf = TestForm(T, {'A1':[u'on'],})
+
+        tf.is_valid()
+
+        self.assertEqual(tf.cleaned_data['A1'], True)
+        self.assertEqual(tf.cleaned_data['A2'], False)
 
     def test_create_random_test_questions(self):
 
