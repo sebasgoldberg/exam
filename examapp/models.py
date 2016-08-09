@@ -33,7 +33,6 @@ class Manual(models.Model):
 
 class Subject(models.Model):
     
-    manual = models.ForeignKey(Manual, verbose_name=_(u'Manual'))
     subject = models.CharField(max_length=256, verbose_name=_(u'Subject'))
 
     class Meta:
@@ -42,12 +41,13 @@ class Subject(models.Model):
         app_label = 'examapp'
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.manual, self.subject)
+        return u'%s' % self.subject
 
 
 class Question(models.Model):
     
     subject = models.ForeignKey(Subject, verbose_name=_(u'Subject'))
+    manual = models.ForeignKey(Manual, verbose_name=_(u'Manual'), blank=True, null=True)
     page = models.PositiveSmallIntegerField(verbose_name=_(u'Page'), blank=True, null=True)
     question = models.TextField(verbose_name=_(u'Question'))
 
@@ -185,7 +185,7 @@ class TestQuestion(models.Model):
     test = models.ForeignKey(Test, verbose_name=_(u'Test'))
 
     def create_test_answers(self):
-        for a in self.ref_question.answer_set.all():
+        for a in self.ref_question.answer_set.all().order_by('?'):
             self.testanswer_set.create(
                 ref_answer = a,
                 test_question = self
