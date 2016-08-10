@@ -31,3 +31,4 @@ familiasskus.*.json
 *.sql
 backup/*
 venv/*
+env.py
