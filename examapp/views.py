@@ -11,12 +11,17 @@ def index(request):
     template = loader.get_template('examapp/index.html')
     context = {
         'test_models': TestModel.objects.all(),
+        'last_tests': [ Test.objects.get(id=x) for x in request.session.get('last_tests', []) ]
         }
     return HttpResponse(template.render(context, request))
 
 def new(request, test_model_id):
     tm = TestModel.objects.get(id=test_model_id)
-    return redirect('test', test_id=tm.create_test().id)
+    t = tm.create_test()
+    last_tests = request.session.get('last_tests', [])
+    last_tests.insert(0,t.id)
+    request.session['last_tests'] = last_tests
+    return redirect('test', test_id=t.id)
 
 def test(request, test_id):
     return redirect('result', test_id=test_id)

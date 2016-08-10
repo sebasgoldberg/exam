@@ -1,9 +1,19 @@
 <html>
 <body>
+<h1>Test Models</h1>
+Click any of the followings links to create a new test:
 {% for tm in test_models %}
 <ul>
     <li><a href='/examapp/{{tm.id}}/new/'>{{tm}}</a></li>
 </ul>
 {% endfor %}
+
+<h1>Last Created Tests</h1>
+{% for t in last_tests %}
+<ul>
+    <li><a href='/examapp/{{t.id}}/result/'>{{t}}</a></li>
+</ul>
+{% endfor %}
+
 </body>
 </html>

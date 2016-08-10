@@ -167,6 +167,12 @@ class TestModelSubject(models.Model):
 class Test(models.Model):
     test_model = models.ForeignKey(TestModel, verbose_name=_(u'Test Model'))
 
+    def __str__(self):
+        return u'%s[%s]' % (self.test_model, self.id)
+
+    def __unicode__(self):
+        return u'%s[%s]' % (self.test_model, self.id)
+
     def create_random_test_questions(self, tms, n):
         result = []
         for q in tms.random_questions(n):
