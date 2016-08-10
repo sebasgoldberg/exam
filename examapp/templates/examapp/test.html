@@ -1,5 +1,16 @@
+<!DOCTYPE html>
 <html>
-<body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <style>
+    pre{
+      white-space:pre-wrap;
+      }
+  </style>
+</head>
+<body class="container">
 <a href=/examapp/>Back to home</a>
 <h2>Note: {{note|floatformat:2}} %</h2>
 
@@ -8,7 +19,7 @@
     <hr>
     {% csrf_token %}
     {% for q in test.testquestion_set.all %}
-        <h3><strong><pre>[{{ q.ref_question.subject }}, {{ q.ref_question.manual }}, {{ q.ref_question.page }}] {{q.ref_question.question}}</pre></strong></h3>
+        <h3><strong><pre>{{forloop.counter}}) [{{ q.ref_question.subject }}, {{ q.ref_question.manual }}, {{ q.ref_question.page }}] {{q.ref_question.question}}</pre></strong></h3>
         {% for a in q.testanswer_set.all %}
             <input type=checkbox name='A{{a.id}}' 
                 {% if a.is_correct %}checked=checked{% endif %} id='id_A{{a.id}}'>{{a.ref_answer.answer}}</input><br/>
