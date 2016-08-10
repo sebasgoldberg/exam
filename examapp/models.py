@@ -27,6 +27,9 @@ class Manual(models.Model):
         verbose_name_plural = _(u"Manual")
         app_label = 'examapp'
 
+    def __str__(self):
+        return u'%s' % self.manual
+
     def __unicode__(self):
         return u'%s' % self.manual
 
@@ -39,6 +42,9 @@ class Subject(models.Model):
         verbose_name = _(u"Subject")
         verbose_name_plural = _(u"Subjects")
         app_label = 'examapp'
+
+    def __str__(self):
+        return u'%s' % self.subject
 
     def __unicode__(self):
         return u'%s' % self.subject
@@ -55,6 +61,9 @@ class Question(models.Model):
         verbose_name = _(u"Question")
         verbose_name_plural = _(u"Questions")
         app_label = 'examapp'
+
+    def __str__(self):
+        return u'[%s] [%s] %s' % (self.subject, self.page, self.question)
 
     def __unicode__(self):
         return u'[%s] [%s] %s' % (self.subject, self.page, self.question)
@@ -77,6 +86,9 @@ class Answer(models.Model):
         verbose_name_plural = _(u"Answers")
         app_label = 'examapp'
 
+    def __str__(self):
+        return u'%s' % (self.answer)
+
     def __unicode__(self):
         return u'%s' % (self.answer)
 
@@ -90,6 +102,9 @@ class TestModel(models.Model):
         verbose_name = _(u"Test Model")
         verbose_name_plural = _(u"Test Models")
         app_label = 'examapp'
+
+    def __str__(self):
+        return u'%s' % self.test_model
 
     def __unicode__(self):
         return u'%s' % self.test_model
@@ -118,7 +133,7 @@ class TestModel(models.Model):
         tms, weight = tms_weights[-1]
         total_questions = total_questions + len(t.create_random_test_questions(tms, self.questions - total_questions))
 
-        if total_questions <> self.questions:
+        if total_questions != self.questions:
             raise QuestionsQuantityError('The expected questions %s is different than the generated questions %s.'
                 % (self.questions, total_questions))
 
@@ -135,6 +150,9 @@ class TestModelSubject(models.Model):
         verbose_name = _(u"Test Model Subject")
         verbose_name_plural = _(u"Test Model Subjects")
         app_label = 'examapp'
+
+    def __str__(self):
+        return u'%s [%s-%s]' % (self.subject, self.weight_from, self.weight_to)
 
     def __unicode__(self):
         return u'%s [%s-%s]' % (self.subject, self.weight_from, self.weight_to)
@@ -169,7 +187,7 @@ class Test(models.Model):
 
         for tq in self.testquestion_set.all():
             for ta in tq.testanswer_set.all():
-                if ta.is_correct <> ta.ref_answer.is_correct:
+                if ta.is_correct != ta.ref_answer.is_correct:
                     correct_questions = correct_questions - 1
                     break
 

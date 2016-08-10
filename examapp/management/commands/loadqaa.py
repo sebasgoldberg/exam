@@ -107,7 +107,7 @@ class Command(BaseCommand):
                                     
                                     manual = None
                                     
-                                    if register[MANUAL] <> '':
+                                    if register[MANUAL] != '':
 
                                         manual = Manual.objects.get(
                                             manual=register[MANUAL]
@@ -184,7 +184,7 @@ class Command(BaseCommand):
                                 for i in range(FIRST_RESPONSE,len(register),2):
                                     if register[i] == '':
                                         continue
-                                    is_correct = ( register[i+1] <> '' )
+                                    is_correct = ( register[i+1] != '' )
 
                                     question.answer_set.create(
                                         answer = register[i],

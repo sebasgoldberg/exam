@@ -30,3 +30,4 @@ vendor
 familiasskus.*.json
 *.sql
 backup/*
+venv/*
