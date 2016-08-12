@@ -136,6 +136,12 @@ class TestModel(models.Model):
         if total_questions != self.questions:
             raise QuestionsQuantityError('The expected questions %s is different than the generated questions %s.'
                 % (self.questions, total_questions))
+      
+        i = 1
+        for q in t.testquestion_set.all():
+            q.question_number = i
+            q.save()
+            i = i + 1
 
         return t
 
@@ -207,6 +213,7 @@ class Test(models.Model):
 class TestQuestion(models.Model):
     ref_question = models.ForeignKey(Question, verbose_name=_(u'Question'))
     test = models.ForeignKey(Test, verbose_name=_(u'Test'))
+    question_number = models.PositiveSmallIntegerField(verbose_name=_(u'Question number'), null=True, blank=True)
 
     def create_test_answers(self):
         for a in self.ref_question.answer_set.all().order_by('?'):
@@ -214,6 +221,20 @@ class TestQuestion(models.Model):
                 ref_answer = a,
                 test_question = self
             )
+
+    def get_previous_question_id(self):
+        from django.db.models import Max
+        previous_questions = self.test.testquestion_set.filter(id__lt=self.id)
+        if not previous_questions.exists():
+            raise TestQuestion.DoesNotExist()
+        return previous_questions.aggregate(Max('id'))['id__max']
+
+    def get_next_question_id(self):
+        from django.db.models import Min
+        next_questions = self.test.testquestion_set.filter(id__gt=self.id)
+        if not next_questions.exists():
+            raise TestQuestion.DoesNotExist()
+        return next_questions.aggregate(Min('id'))['id__min']
 
 class TestAnswer(models.Model):
     ref_answer = models.ForeignKey(Answer, verbose_name=_(u'Answer'))

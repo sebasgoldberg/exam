@@ -7,6 +7,13 @@ from django.shortcuts import redirect
 from examapp.models import *
 from examapp.forms import *
 
+def add_test_to_last_tests(request, test_id):
+    last_tests = request.session.get('last_tests', [])
+    if test_id in last_tests:
+        return
+    last_tests.insert(0,test_id)
+    request.session['last_tests'] = last_tests
+
 def index(request):
     template = loader.get_template('examapp/index.html')
     context = {
@@ -18,9 +25,7 @@ def index(request):
 def new(request, test_model_id):
     tm = TestModel.objects.get(id=test_model_id)
     t = tm.create_test()
-    last_tests = request.session.get('last_tests', [])
-    last_tests.insert(0,t.id)
-    request.session['last_tests'] = last_tests
+    add_test_to_last_tests(request, t.id)
     return redirect('test', test_id=t.id)
 
 def test(request, test_id):
@@ -30,7 +35,6 @@ def test(request, test_id):
         'test': Test.objects.get(id=test_id),
         }
     return HttpResponse(template.render(context, request))
-
 
 from django.db import transaction
 
@@ -54,3 +58,36 @@ def result(request, test_id):
         }
 
     return HttpResponse(template.render(context, request))
+
+
+def question(request, test_question_id):
+    tq = TestQuestion.objects.get(id=test_question_id)
+    if request.method == 'POST':
+        f = TestForm(tq.test, request.POST)
+        if f.is_valid():
+            for a in tq.testanswer_set.all():
+                a.is_correct = f.cleaned_data['A%s'%a.id]
+                a.save()
+            tq.refresh_from_db()
+
+    try:
+        previous_test_question = tq.get_previous_question_id()
+    except TestQuestion.DoesNotExist:
+        previous_test_question = 0
+    try:
+        next_test_question = tq.get_next_question_id()
+    except TestQuestion.DoesNotExist:
+        next_test_question = 0
+    note = tq.test.get_test_note()
+    template = loader.get_template('examapp/question.html')
+    context = {
+        'note': note * 100,
+        'tq': tq,
+        'previous_test_question': previous_test_question,
+        'next_test_question': next_test_question
+        }
+
+    return HttpResponse(template.render(context, request))
+
+
+

@@ -1,0 +1,29 @@
+{% extends 'examapp/base.html'%}
+
+{% block aditional_menu %}
+<li><a href="/examapp/{{tq.test.id}}/test/">Test Mode</a></li>
+{% endblock %}
+
+{% block test_form_action %}
+action="/examapp/{{tq.id}}/question/"
+{% endblock %}
+
+{% block test_form_content %}
+    {% if previous_test_question > 0%}
+      <a class='btn btn-default' role='button' href="/examapp/{{previous_test_question}}/question/">Previous</a>
+    {% endif %}
+    <input class='btn btn-success' type='submit' value='Post' />
+    {% if next_test_question > 0%}
+      <a class='btn btn-default' role='button' href="/examapp/{{next_test_question}}/question/">Next</a>
+    {% endif %}
+    <hr>
+    {% include 'examapp/question.inc.html' with q=tq %}
+    <hr>
+    {% if previous_test_question > 0%}
+      <a class='btn btn-default' role='button' href="/examapp/{{previous_test_question}}/question/">Previous</a>
+    {% endif %}
+    <input class='btn btn-success' type='submit' value='Post' />
+    {% if next_test_question > 0%}
+      <a class='btn btn-default' role='button' href="/examapp/{{next_test_question}}/question/">Next</a>
+    {% endif %}
+{% endblock %}
