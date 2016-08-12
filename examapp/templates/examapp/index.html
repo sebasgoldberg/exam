@@ -1,25 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-</head>
-<body class="container">
-<h1>Test Models</h1>
-Click any of the followings links to create a new test:
-{% for tm in test_models %}
-<ul>
-    <li><a href='/examapp/{{tm.id}}/new/'>{{tm}}</a></li>
-</ul>
-{% endfor %}
+{% extends 'examapp/base.html'%}
 
-<h1>Last Created Tests</h1>
-{% for t in last_tests %}
-<ul>
-    <li><a href='/examapp/{{t.id}}/result/'>{{t}}</a></li>
-</ul>
-{% endfor %}
+{% block extra_title %}
+{% endblock %}
 
-</body>
-</html>
+{% block aditional_menu %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Test Models <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                {% for tm in test_models %}
+                    <li><a href='/examapp/{{tm.id}}/new/'>{{tm}}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Last Created Tests <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                {% for t in last_tests %}
+                    <li><a href='/examapp/{{t.id}}/test/'>{{t}}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

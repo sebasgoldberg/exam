@@ -26,7 +26,7 @@ def new(request, test_model_id):
     tm = TestModel.objects.get(id=test_model_id)
     t = tm.create_test()
     add_test_to_last_tests(request, t.id)
-    return redirect('test', test_id=t.id)
+    return redirect('question', test_question_id=t.testquestion_set.get(question_number=1).id)
 
 def test(request, test_id):
     return redirect('result', test_id=test_id)
