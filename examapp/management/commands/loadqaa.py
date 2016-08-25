@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
     def loadqaa_unformated(self, *args, **options):
 
-        subject = Subject.objects.get_or_create(subject='Retail')[0]
+        subject = Subject.objects.get_or_create(subject='Security - Oficial')[0]
         
         with open('loadqaa.err', 'w') as ferr:
 
@@ -56,7 +56,7 @@ class Command(BaseCommand):
                             continue
 
                         if question_mode:
-                            question_text = '%s%s' % (question_text, line)
+                            question_text = u'%s%s' % (question_text, line.decode('utf8','ignore'))
 
                         if response_mode:
                             try:
