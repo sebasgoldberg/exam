@@ -56,6 +56,7 @@ class Question(models.Model):
     manual = models.ForeignKey(Manual, verbose_name=_(u'Manual'), blank=True, null=True)
     page = models.PositiveSmallIntegerField(verbose_name=_(u'Page'), blank=True, null=True)
     question = models.TextField(verbose_name=_(u'Question'))
+    other_subjects = models.ManyToManyField(Subject, verbose_name=_(u'Other subjects'), related_name='other_questions_set')
 
     class Meta:
         verbose_name = _(u"Question")
@@ -168,6 +169,8 @@ class TestModelSubject(models.Model):
 
     def random_questions(self, n):
         for q in self.subject.question_set.order_by('?')[:n]:
+            yield q
+        for q in self.subject.other_questions_set.order_by('?')[:n]:
             yield q
 
 class Test(models.Model):
