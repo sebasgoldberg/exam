@@ -56,7 +56,7 @@ class Question(models.Model):
     manual = models.ForeignKey(Manual, verbose_name=_(u'Manual'), blank=True, null=True)
     page = models.PositiveSmallIntegerField(verbose_name=_(u'Page'), blank=True, null=True)
     question = models.TextField(verbose_name=_(u'Question'))
-    other_subjects = models.ManyToManyField(Subject, verbose_name=_(u'Other subjects'), related_name='other_questions_set')
+    other_subjects = models.ManyToManyField(Subject, verbose_name=_(u'Other subjects'), related_name='other_questions_set', blank= True)
 
     class Meta:
         verbose_name = _(u"Question")

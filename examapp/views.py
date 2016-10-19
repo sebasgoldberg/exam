@@ -16,9 +16,15 @@ def add_test_to_last_tests(request, test_id):
 
 def index(request):
     template = loader.get_template('examapp/index.html')
+    last_tests = [  ]
+    for x in request.session.get('last_tests', []):
+        try:
+            last_tests.append(Test.objects.get(id=x))
+        except Test.DoesNotExist:
+            pass
     context = {
         'test_models': TestModel.objects.all(),
-        'last_tests': [ Test.objects.get(id=x) for x in request.session.get('last_tests', []) ]
+        'last_tests': last_tests
         }
     return HttpResponse(template.render(context, request))
 
