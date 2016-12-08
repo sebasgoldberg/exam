@@ -17,6 +17,6 @@ action="/examapp/{{tq.id}}/question/"
       <a class='btn btn-default' role='button' href="/examapp/{{next_test_question}}/question/">Next</a>
     {% endif %}
     <hr>
-    {% include 'examapp/question.inc.html' with q=tq %}
+      {% include 'examapp/question.inc.html' with q=tq %}
     <hr>
 {% endblock %}

@@ -1,5 +1,15 @@
-<a href='/examapp/{{q.id}}/question/'><h3><strong><pre>{{q.question_number}}) [{{ q.ref_question.subject }}, {{ q.ref_question.manual }}, {{ q.ref_question.page }}] {{q.ref_question.question}}</pre></strong></h3></a>
-{% for a in q.testanswer_set.all %}
-    <input type=checkbox name='A{{a.id}}' 
-        {% if a.is_correct %}checked=checked{% endif %} id='id_A{{a.id}}'>{{a.ref_answer.answer}}</input><br/>
-{% endfor %}
+<div
+  {% if not q.is_initial %}
+    {% if q.is_correct %}
+      class="alert alert-success"
+    {% else %}
+      class="alert alert-danger"
+    {% endif %}
+  {% endif %}
+  >
+  <a href='/examapp/{{q.id}}/question/'><h3><strong><pre>{{q.question_number}}) [{{ q.ref_question.subject }}, {{ q.ref_question.manual }}, {{ q.ref_question.page }}] {{q.ref_question.question}}</pre></strong></h3></a>
+  {% for a in q.testanswer_set.all %}
+      <input type=checkbox name='A{{a.id}}' 
+          {% if a.is_correct %}checked=checked{% endif %} id='id_A{{a.id}}'>{{a.ref_answer.answer}}</input><br/>
+  {% endfor %}
+</div>

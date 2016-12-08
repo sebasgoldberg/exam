@@ -201,10 +201,8 @@ class Test(models.Model):
         correct_questions = total_questions
 
         for tq in self.testquestion_set.all():
-            for ta in tq.testanswer_set.all():
-                if ta.is_correct != ta.ref_answer.is_correct:
-                    correct_questions = correct_questions - 1
-                    break
+            if not tq.is_correct():
+                correct_questions = correct_questions - 1
 
         return float(correct_questions)/float(total_questions)
 
@@ -238,6 +236,19 @@ class TestQuestion(models.Model):
         if not next_questions.exists():
             raise TestQuestion.DoesNotExist()
         return next_questions.aggregate(Min('id'))['id__min']
+
+    def is_correct(self):
+        for ta in self.testanswer_set.all():
+            if ta.is_correct != ta.ref_answer.is_correct:
+                return False
+        return True
+
+    def is_initial(self):
+        for ta in self.testanswer_set.all():
+            if ta.is_correct:
+                return False
+        return True
+
 
 class TestAnswer(models.Model):
     ref_answer = models.ForeignKey(Answer, verbose_name=_(u'Answer'))
